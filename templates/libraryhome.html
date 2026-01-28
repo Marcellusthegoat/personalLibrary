@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TheLibrary</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body style="background-color: gray">
+    <!-- start of navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">{{session["username"]}}'s Library:</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#newBookModal"
+                data-bs-whatever="@getbootstrap"
+              >
+                Add a book to your library:
+              </button>
+            </li>
+            <li class="nav-item">
+              <a href="/logout" style="margin-left: 1430px;"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- end of navbar -->
+
+    <!-- start of implemented books -->
+    <h1
+      style="
+        background-color: rgb(37, 37, 37);
+        color: white;
+        width: 1000px;
+        margin-left: 475px;
+        margin-top: 100px;
+      "
+      class="text-white text-center"
+    >
+      Book Collection
+    </h1>
+    <form action="/libraryHome" method="GET"></form>
+    <div class="row row-cols-1 row-cols-md-4 g-4 " style="margin-left: 475px; width: 1000px;">
+      
+        {% for book in books %}
+          <div class="col">
+            <div class="card h-100">
+                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                <div class="card-body">
+                  <h5 class="card-title">{{book['BOOK_NAME']}}</h5>
+                  <p class="card-text">{{book['BOOK_DESCRIPTION']}}</p>
+                  <div>
+                    <a href="/delete/{{book['_id']}}"><button type="button" class="btn btn-danger">DELETE</button></a>
+                    <button
+                type="button"
+                class="btn btn-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#editBookModal"
+                data-bs-whatever="@getbootstrap"
+              >
+                EDIT
+              </button>
+                  </div>
+                </div>
+              <div class="card-footer">
+                <small class="text-body-secondary">This book has {{book['BOOK_PAGES']}} pages!</small>
+              </div>
+            </div>
+          </div>
+
+
+    <form action="/edit/{{book['_id']}}" method="POST">
+      <div
+        class="modal fade"
+        id="editBookModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">New Book</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Updated Book Name:</span
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Name Of Book"
+                      aria-label="bookName"
+                      name="e_bookName"
+                      id="bookName"
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Updated Page Count</span
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Number of Pages"
+                      aria-label="pageNumbers"
+                      name="e_numOfPages"
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Updated Description</span
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Description"
+                      aria-label="description"
+                      name="e_description"
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text" id="basic-addon1"
+                        >Updated Image Link</span
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Image Link (optional)"
+                        name="e_imageLink"
+                        aria-label="Username"
+                        aria-describedby="basic-addon1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Submit Edited Book
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+        {%endfor%}
+      </form>
+      
+
+    <!-- end of implemented books -->
+
+    <!-- start of new book modal -->
+    <form action="/newBook" method="POST">
+      <div
+        class="modal fade"
+        id="newBookModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">New Book</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Book Name:</span
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Name Of Book"
+                      aria-label="bookName"
+                      name="bookName"
+                      id="bookName"
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Page Count</span
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Number of Pages"
+                      aria-label="pageNumbers"
+                      name="numOfPages"
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Description</span
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Description"
+                      aria-label="description"
+                      name="description"
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text" id="basic-addon1"
+                        >Image Link</span
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Image Link (optional)"
+                        name="imageLink"
+                        aria-label="Username"
+                        aria-describedby="basic-addon1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Submit New Book
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- end of new book modal -->
+
+    <!-- edit book modal -->
+     
+    <!-- end of edit book modal -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
