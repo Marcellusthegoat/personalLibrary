@@ -17,9 +17,15 @@ def index():
 @app.route("/libraryHome", methods = ['GET','POST'])
 def libraryHome():
     if request.method == 'GET':
-        libraryBooks = list(db.books.find({"USER":session["username"]}))
-        print("GOT THE FOLLOWING DATA:" + str(libraryBooks))
-        return render_template("libraryHome.html",books = libraryBooks)
+        if "username" not in session:
+            flash("You must Login or Register Before you are allowed to visit this page!")
+            return redirect("/")
+        else:
+            libraryBooks = list(db.books.find({"USER":session["username"]}))
+            print("GOT THE FOLLOWING DATA:" + str(libraryBooks))
+            return render_template("libraryHome.html",books = libraryBooks)
+        
+           
     return render_template("libraryHome.html")
 
 @app.route("/loginUser", methods = ['GET','POST'])
@@ -51,11 +57,16 @@ def register():
     password = sha256_crypt.hash(request.form.get("userPassword"))
     email = request.form.get("userEmail")
     print("ATTEMPTING TO INPUT: {USERNAME:",username +", PASSWORD:",password+",EMAIL:",email,"}")
-    db.users.insert_one({"USERNAME":username,"PASSWORD":password,"EMAIL":email})
-    print("INPUT WAS SUCCESFUL")
-    session["username"] = username
-    print("session:", session["username"])
-    return redirect("/libraryHome")
+    user = db.users.find_one({"USERNAME":username})
+    if user:
+        flash("this username is taken")
+        return redirect("/")
+    else:
+        db.users.insert_one({"USERNAME":username,"PASSWORD":password,"EMAIL":email})
+        print("INPUT WAS SUCCESFUL")
+        session["username"] = username
+        print("session:", session["username"])
+        return redirect("/libraryHome")
 
 @app.route("/newBook", methods = ['GET','POST'])
 def newBook():
@@ -79,10 +90,17 @@ def edit(book_id):
     bookImage = request.form.get("e_imageLink")
     db.books.update_one({'_id':ObjectId(book_id)},{'$set':{'BOOK_NAME':bookName,'BOOK_PAGES':bookPages,'BOOK_DESCRIPTION':bookDescription,'BOOK_IMAGE':bookImage}})
     return redirect("/libraryHome")
+
+@app.route("/search", methods = ["POST","GET"])
+def search():
+    bookName = request.form.get("bookSearch")
+    books =  list(db.books.find( {"BOOK_NAME": {"$regex":bookName,"$options": 'i'}, "USER":session['username']}))
+    print(books)
+    return render_template("search.html", searchedBooks = books )
 @app.route("/logout")
 def logout():
     session.clear()
-    flash("officialy logged out")
+    # flash("officialy logged out")
     return redirect("/")
 if __name__ == '__main__':
     app.debug = True
