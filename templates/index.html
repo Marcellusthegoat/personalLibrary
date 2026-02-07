@@ -157,6 +157,7 @@
             </div>
 
             <div class="modal-body">
+              
               <form>
                 <div class="mb-3">
                   <div class="input-group mb-3">
@@ -221,6 +222,16 @@
       </div>
     </form>
 
+
+    {% with messages = get_flashed_messages() %} 
+      {% if messages %} 
+        {%for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{message}}
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     <!-- end of register modal -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -229,3 +240,4 @@
     ></script>
   </body>
 </html>
+
