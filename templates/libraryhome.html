@@ -40,8 +40,23 @@
                 Add a book to your library:
               </button>
             </li>
+            <form class="d-flex" role="search" style="margin-left: 1030px; width: 500px;" action="/search" method="POST">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                name = "bookSearch"
+              />
+              <button class="btn btn-outline-success" type="submit">
+                Search
+              </button>
+              <li class="nav-item">
+                >
+              </li>
+            </form>
             <li class="nav-item">
-              <a href="/logout" style="margin-left: 1430px;"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+              <a href="/logout" style="margin-left: 100px;"><button type="button" class="btn btn-danger">LOGOUT</button></a>
             </li>
           </ul>
         </div>
@@ -62,8 +77,8 @@
     >
       Book Collection
     </h1>
-    <form action="/libraryHome" method="GET"></form>
-    <div class="row row-cols-1 row-cols-md-4 g-4 " style="margin-left: 475px; width: 1000px;">
+    <form action="/libraryHome" method="GET"> 
+    <div class="row row-cols-2 row-cols-md-3 g-4 style="margin-left: 475px; width: 1000px;">
       
         {% for book in books %}
           <div class="col">
@@ -193,6 +208,7 @@
       </div>
     </form>
         {%endfor%}
+        </div>
       </form>
       
 
